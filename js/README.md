@@ -45,7 +45,7 @@ the trained arms.
 ## Publishing (GitHub Packages, private)
 
 The package is published to GitHub Packages, so only people with read access to
-`qdrant-labs/search-routing-experiments` can install it. `publishConfig` keeps `npm publish` off
+`qdrant-labs/autofusion-router` can install it. `publishConfig` keeps `npm publish` off
 the public registry.
 
 ```bash
