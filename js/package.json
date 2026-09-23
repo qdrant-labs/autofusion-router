@@ -2,11 +2,11 @@
   "name": "@qdrant-labs/autofusion-router",
   "version": "1.0.0",
   "description": "Route a search query to dense, sparse, or RRF retrieval from word rarity alone. Zero dependencies.",
-  "license": "Apache-2.0",
+  "license": "Apache-2.0 AND CC-BY-SA-4.0",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/qdrant-labs/autofusion-router.git",
-    "directory": "autofusion-router/js"
+    "directory": "js"
   },
   "type": "module",
   "exports": {
