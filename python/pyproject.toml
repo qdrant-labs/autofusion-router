@@ -1,0 +1,23 @@
+[project]
+name = "autofusion-router"
+version = "1.0.0"
+description = "Route a search query to dense, sparse, or RRF retrieval from word rarity alone."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.24", "wordfreq>=3.1,<4"]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/autofusion_router"]
+
+[tool.hatch.build.targets.sdist]
+# src's arms.json is a symlink into ../bundle; the sdist swaps it for the real file so it builds standalone
+exclude = ["src/autofusion_router/arms.json"]
+force-include = { "../bundle/arms.json" = "src/autofusion_router/arms.json" }
