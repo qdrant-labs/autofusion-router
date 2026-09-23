@@ -6,7 +6,7 @@ service's zipf-only arms, served with numpy and wordfreq, and needs no torch.
 It isn't on PyPI. Install a release tag from the repo, which needs read access to
 `qdrant-labs/autofusion-router`:
 
-    pip install "git+https://github.com/qdrant-labs/autofusion-router.git@python-v1.0.0#subdirectory=python"
+    pip install "git+https://github.com/qdrant-labs/autofusion-router.git@python-v1.1.0#subdirectory=python"
 
 ```python
 from autofusion_router import Arm, Route, Router
