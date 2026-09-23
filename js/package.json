@@ -1,0 +1,40 @@
+{
+  "name": "@qdrant-labs/autofusion-router",
+  "version": "1.0.0",
+  "description": "Route a search query to dense, sparse, or RRF retrieval from word rarity alone. Zero dependencies.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/qdrant-labs/autofusion-router.git",
+    "directory": "autofusion-router/js"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "data",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20.10"
+  },
+  "scripts": {
+    "data": "rm -rf data && mkdir -p data && cp ../bundle/arms.json ../bundle/zipf_en.json data/ && node scripts/arms.mjs",
+    "build": "npm run data && tsc",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "prepublishOnly": "npm test"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}

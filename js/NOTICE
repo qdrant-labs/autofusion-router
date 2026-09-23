@@ -1,0 +1,15 @@
+data/zipf_en.json is derived from the English "large" wordlist of wordfreq by Robyn Speer
+(https://github.com/rspeer/wordfreq), whose data is licensed CC-BY-SA 4.0
+(https://creativecommons.org/licenses/by-sa/4.0/). That file is distributed under the same licence.
+
+data/arms.json holds the one router arm this build ships. Its `trained_license` names the licence tiers of the
+query collections it was trained on; `all` includes non-commercial and unlicensed sources.
+`trained_lanes` lists those collections; the weights contain no text from them.
+
+Training data acknowledgements, by the ALLOW_LICENSE level this build was exported at.
+NONE and PERMISSIVE: BRIGHT (xlangai, CC-BY-4.0), QUEST (cmalaviya, Apache-2.0), MIRACL (Apache-2.0),
+LIMIT (Google DeepMind, CC-BY-4.0), ScIRGen-Geo (usail-hkust, CC-BY-4.0), WANDS (Wayfair, MIT).
+PERMISSIVE also: GooAQ (Allen AI, Apache-2.0), WebFAQ (PaDaS-Lab, CC-BY-4.0),
+FreshStack (CC-BY-SA-4.0), LoTTE (Apache-2.0), BEIR NFCorpus and DBpedia-Entity (CC-BY-SA-4.0),
+and BRIGHT's StackExchange-sourced splits. FreshStack, LoTTE and those BRIGHT splits carry
+StackExchange posts, contributed by their authors under CC-BY-SA.
