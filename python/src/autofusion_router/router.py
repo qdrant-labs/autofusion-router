@@ -16,6 +16,14 @@ import numpy as np
 from wordfreq import zipf_frequency
 
 TrainedLicense = Literal["all", "permissive_sharealike", "permissive"]
+
+
+class Route(StrEnum):
+    DENSE_ONLY = "dense_only"
+    SPARSE_ONLY = "sparse_only"
+    PURE_RRF = "pure_rrf"
+
+
 _WORD = re.compile(r"[a-z0-9]+")
 _ACTIVATIONS = {
     "relu": lambda x: np.maximum(x, 0.0),
@@ -52,7 +60,7 @@ Arm = StrEnum("Arm", {name.upper(): name for name in manifest()["arms"]})
 @dataclass(frozen=True)
 class Classification:
     query: str
-    route: str
+    route: Route
     p_dense: float
     p_sparse: float
 
@@ -83,8 +91,10 @@ class ArmModel:
         self.trained_at: str = bundle["trained_at"]
         self.delta: float = bundle["rrf_delta"]
         self.k: float = bundle["fusion_k"]
-        heads = bundle["head_routes"]
-        self._sparse, self._dense = heads.index("sparse_only"), heads.index("dense_only")
+        heads = [Route(r) for r in bundle["head_routes"]]
+        self._hedge = Route(bundle["hedge"])
+        self._choices = np.array([*heads, self._hedge], dtype=object)
+        self._sparse, self._dense = heads.index(Route.SPARSE_ONLY), heads.index(Route.DENSE_ONLY)
         self._thresholds = np.asarray(bundle["thresholds"], np.float32)
         self._mean = np.asarray(bundle["zipf_mean"], np.float32)
         self._std = np.asarray(bundle["zipf_std"], np.float32)
@@ -103,12 +113,11 @@ class ArmModel:
 
     def _serve(self, probs: np.ndarray) -> np.ndarray:
         """Most probable head among those clearing their threshold, else the most probable head."""
-        choices = np.array([*self.bundle["head_routes"], self.bundle["hedge"]], dtype=object)
         fires = probs >= self._thresholds
         fired = np.where(fires, probs, -np.inf).argmax(axis=1)
         doubt = probs.max(axis=1) < self.bundle["hedge_bar"]
         fallback = np.where(doubt, probs.shape[1], probs.argmax(axis=1))
-        return choices[np.where(fires.any(axis=1), fired, fallback)]
+        return self._choices[np.where(fires.any(axis=1), fired, fallback)]
 
     def classify(self, queries: str | list[str], delta: float | None = None) -> list[Classification]:
         qs = [queries] if isinstance(queries, str) else list(queries)
@@ -117,10 +126,12 @@ class ArmModel:
         probs = self.probabilities(qs)
         s, d = probs[:, self._sparse], probs[:, self._dense]
         delta = self.delta if delta is None else delta
-        route = np.where(np.abs(d - s) < delta, self.bundle["hedge"], self._serve(probs))
-        return [Classification(q, str(route[i]), float(d[i]), float(s[i])) for i, q in enumerate(qs)]
+        tie, served = np.abs(d - s) < delta, self._serve(probs)
+        return [
+            Classification(q, self._hedge if tie[i] else served[i], float(d[i]), float(s[i])) for i, q in enumerate(qs)
+        ]
 
-    def classify_pure(self, queries: str | list[str], delta: float | None = None) -> list[str]:
+    def classify_pure(self, queries: str | list[str], delta: float | None = None) -> list[Route]:
         return [r.route for r in self.classify(queries, delta)]
 
     def weighted(
@@ -180,7 +191,7 @@ class Router:
     def classify(self, queries: str | list[str], delta: float | None = None) -> list[Classification]:
         return self._arm.classify(queries, delta)
 
-    def classify_pure(self, queries: str | list[str], delta: float | None = None) -> list[str]:
+    def classify_pure(self, queries: str | list[str], delta: float | None = None) -> list[Route]:
         return self._arm.classify_pure(queries, delta)
 
     def weighted(

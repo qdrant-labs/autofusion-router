@@ -5,13 +5,13 @@ zero-dependency TypeScript port of the router service's zipf-only arms, and runs
 Bun, Deno, browsers, and edge runtimes.
 
 ```ts
-import { Arm, Router } from "@qdrant-labs/autofusion-router";
+import { Arm, Route, Router } from "@qdrant-labs/autofusion-router";
 
 const router = new Router();                          // the one arm this build ships
 router.current;                                       // "v3_zipf_only_permissive_sharealike"
 router.getArms();                                     // [{ name, trained_license, trained_at }]
 router.classify("CVE-2021-44228 log4j");              // [{ query, route, p_dense, p_sparse }]
-router.classifyPure(["why do cats purr"]);            // ["sparse_only"]
+router.classifyPure(["why do cats purr"]);            // ["sparse_only"], i.e. [Route.SPARSE_ONLY]
 router.weighted("oil rubbed bronze door knob");       // [{ query, alpha, p_dense, p_sparse }]
 ```
 

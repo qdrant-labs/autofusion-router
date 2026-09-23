@@ -9,13 +9,13 @@ It isn't on PyPI. Install a release tag from the repo, which needs read access t
     pip install "git+https://github.com/qdrant-labs/autofusion-router.git@python-v1.0.0#subdirectory=python"
 
 ```python
-from autofusion_router import Arm, Router
+from autofusion_router import Arm, Route, Router
 
 router = Router()                                  # the one arm this build ships
 router.current                                     # Arm.V3_ZIPF_ONLY_PERMISSIVE_SHAREALIKE
 router.get_arms()                                  # [ArmInfo(name, trained_license, trained_at)]
 router.classify("CVE-2021-44228 log4j")            # [Classification(query, route, p_dense, p_sparse)]
-router.classify_pure(["why do cats purr"])         # ["sparse_only"]
+router.classify_pure(["why do cats purr"])         # [Route.SPARSE_ONLY], a StrEnum: == "sparse_only"
 router.weighted("oil rubbed bronze door knob")     # [Weighted(query, alpha, p_dense, p_sparse)]
 ```
 

@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from autofusion_router import Arm, Router, zipf_features
+from autofusion_router import Arm, Route, Router, zipf_features
 from autofusion_router.router import manifest
 
 GOLDEN = json.loads((Path(__file__).parents[2] / "bundle" / "golden.json").read_text())
@@ -27,7 +27,7 @@ def test_probabilities_routes_and_alpha_match_torch(arm):
     rows = [want["results"][i] for i, _ in ENGLISH]
     for got, w, row in zip(router.classify(texts), router.weighted(texts), rows, strict=True):
         assert abs(got.p_dense - row["p_dense"]) < EPS and abs(got.p_sparse - row["p_sparse"]) < EPS
-        assert got.route == row["route"], got.query
+        assert got.route is Route(row["route"]), got.query
         assert abs(w.alpha - row["alpha"]) < 1e-4, got.query
 
 

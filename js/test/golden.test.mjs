@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 
-import { Arm, Router, zipf, zipfFeatures } from "../dist/index.js";
+import { Arm, Route, Router, zipf, zipfFeatures } from "../dist/index.js";
 
 const golden = JSON.parse(readFileSync(new URL("../../bundle/golden.json", import.meta.url)));
 const table = JSON.parse(readFileSync(new URL("../data/zipf_en.json", import.meta.url)));
@@ -64,4 +64,6 @@ test("starts on the maintainer's default and chooses only shipped arms", () => {
   const queries = ["CVE-2021-44228 log4j remote code execution", "why do cats purr"];
   assert.deepEqual(router.classifyPure(queries), router.classify(queries).map((c) => c.route));
   assert.equal(router.classify("why do cats purr").length, 1);
+  const routes = Object.values(golden.arms).flatMap((a) => a.results.map((r) => r.route));
+  assert.ok(routes.every((r) => Object.values(Route).includes(r)));   // Route names every route torch emits
 });

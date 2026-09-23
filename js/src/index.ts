@@ -11,7 +11,13 @@ export { Arm, type ArmName } from "./arms.js";
 export { zipf, zipfFeatures } from "./zipf.js";
 
 export type TrainedLicense = "all" | "permissive_sharealike" | "permissive";
-export type Route = "dense_only" | "sparse_only" | "pure_rrf";
+export const Route = {
+  DENSE_ONLY: "dense_only",
+  SPARSE_ONLY: "sparse_only",
+  PURE_RRF: "pure_rrf",
+} as const;
+
+export type Route = (typeof Route)[keyof typeof Route];
 
 export interface Classification {
   query: string;
@@ -109,8 +115,8 @@ class ArmModel {
     this.trainedAt = bundle.trained_at;
     this.delta = bundle.rrf_delta;
     this.k = bundle.fusion_k;
-    this.sparse = bundle.head_routes.indexOf("sparse_only");
-    this.dense = bundle.head_routes.indexOf("dense_only");
+    this.sparse = bundle.head_routes.indexOf(Route.SPARSE_ONLY);
+    this.dense = bundle.head_routes.indexOf(Route.DENSE_ONLY);
     this.layers = bundle.layers.map((l) => ({
       rows: l.shape[0],
       cols: l.shape[1],
