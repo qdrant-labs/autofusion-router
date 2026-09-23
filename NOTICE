@@ -1,0 +1,22 @@
+bundle/golden.json is a test fixture: 70 query strings sampled from the collections below
+(10 per collection; some are paraphrases this project generated from a sampled query), plus
+22 queries written for this project. The strings are unchanged apart from that selection.
+
+- BRIGHT, xlangai (https://huggingface.co/datasets/xlangai/BRIGHT), pony and theoremqa-questions
+  splits, CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/).
+- QUEST, cmalaviya (https://huggingface.co/datasets/cmalaviya/quest), Apache-2.0
+  (https://www.apache.org/licenses/LICENSE-2.0).
+- MIRACL, miracl (https://huggingface.co/datasets/miracl/miracl), English dev topics,
+  Apache-2.0 (https://www.apache.org/licenses/LICENSE-2.0).
+- LIMIT, Google DeepMind (https://github.com/google-deepmind/limit), CC-BY-4.0
+  (https://creativecommons.org/licenses/by/4.0/).
+- ScIRGen-Geo, usail-hkust (https://huggingface.co/datasets/usail-hkust/ScIRGen-Geo), CC-BY-4.0
+  (https://creativecommons.org/licenses/by/4.0/).
+- WANDS, Wayfair (https://github.com/wayfair/WANDS), MIT licence; copyright notice and licence
+  text at https://github.com/wayfair/WANDS/blob/main/LICENSE.
+
+bundle/arms.json holds router weights; each arm's `trained_lanes` lists the collections it was
+trained on. The weights contain no text from them.
+
+bundle/zipf_en.json is derived from the English "large" wordlist of wordfreq by Robyn Speer
+(https://github.com/rspeer/wordfreq), licensed CC-BY-SA 4.0 and distributed under the same licence.
